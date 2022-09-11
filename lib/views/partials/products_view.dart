@@ -68,7 +68,7 @@ class ProductsView extends StatelessWidget {
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.all(12.0),
                   child: Form(
