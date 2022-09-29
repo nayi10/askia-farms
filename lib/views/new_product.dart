@@ -24,6 +24,7 @@ class _NewProductState extends State<NewProduct> {
   final _dropdownFormKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
+  final _quantityController = TextEditingController();
   bool _isProgress = false;
   String? _error;
   List<XFile> images = [];
@@ -105,6 +106,26 @@ class _NewProductState extends State<NewProduct> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 15.0),
+                TextFormField(
+                  controller: _quantityController,
+                  keyboardType: TextInputType.number,
+                  maxLines: null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: const InputDecoration(
+                    labelText: 'Product quantity',
+                  ),
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Quantity is required';
+                    }
+                    if (double.parse(value) <= 0) {
+                      return 'Invalid value for product quantity';
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(
                   height: 15.0,
                 ),
@@ -160,7 +181,7 @@ class _NewProductState extends State<NewProduct> {
           type: _category,
           unitCost: double.tryParse(_priceController.text) ?? 0,
           images: imageUrls,
-          stock: 1);
+          stock: int.tryParse(_quantityController.text) ?? 1);
       await FirebaseFirestore.instance
           .collection('products')
           .add(product.toMap())
@@ -168,6 +189,7 @@ class _NewProductState extends State<NewProduct> {
         setState(() {
           _isProgress = false;
           _priceController.text = '';
+          _quantityController.text = '';
           _nameController.text = '';
           images.clear();
           imageUrls.clear();

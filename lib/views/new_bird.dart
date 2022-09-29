@@ -73,7 +73,7 @@ class _NewBirdState extends State<NewBird> {
                             ref.add(<String, dynamic>{
                               'tag': form.control('tag').value,
                               'type': form
-                                  .control('tag')
+                                  .control('type')
                                   .value
                                   .toString()
                                   .capitalize()

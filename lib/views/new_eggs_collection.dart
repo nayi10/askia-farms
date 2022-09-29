@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../models/egg_collection.dart';
 import '../widgets/custom_snackbar.dart';
 
 class NewEggsCollection extends StatefulWidget {
@@ -197,14 +198,27 @@ class _NewEggsCollectionState extends State<NewEggsCollection> {
                               form.markAllAsTouched();
                               return;
                             }
+                            final collection = EggCollection(
+                                numberOfEggs:
+                                    form.control('numberOfEggs').value as int,
+                                broken: form.control('broken').value as int,
+                                date: Timestamp.fromDate(
+                                    form.control('date').value as DateTime),
+                                time: '''${form.control('time').value.hour}:
+                                    ${form.control('time').value.minute}''');
                             setState(() => _loading = true);
                             final ref =
                                 FirebaseFirestore.instance.collection('eggs');
-                            ref.add(form.value).then((value) {
+                            ref.add(collection.toMap()).then((value) {
                               form.reset();
                               setState(() => _loading = false);
                               CustomSnackBar.snackBar(context,
                                   text: 'Egg collection has been saved',
+                                  message: Message.success);
+                            }).catchError((Object error) {
+                              setState(() => _loading = false);
+                              CustomSnackBar.snackBar(context,
+                                  text: 'Error: $error',
                                   message: Message.success);
                             });
                           },
