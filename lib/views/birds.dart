@@ -50,6 +50,7 @@ class Birds extends StatelessWidget {
                       columns: [
                         const DataColumn(label: Text('Type')),
                         const DataColumn(label: Text('Tag')),
+                        const DataColumn(label: Text('When added')),
                         const DataColumn(label: Text('Delete')),
                       ],
                       source: BirdsData(birds, context: context));

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../models/bird.dart';
 import '../utils.dart';
 import '../widgets/custom_snackbar.dart';
 
@@ -70,14 +71,8 @@ class _NewBirdState extends State<NewBird> {
                             setState(() => _loading = true);
                             final ref =
                                 FirebaseFirestore.instance.collection('birds');
-                            ref.add(<String, dynamic>{
-                              'tag': form.control('tag').value,
-                              'type': form
-                                  .control('type')
-                                  .value
-                                  .toString()
-                                  .capitalize()
-                            }).then((value) {
+                            final bird = Bird.fromMap(form.value);
+                            ref.add(bird.toMap()).then((value) {
                               form.reset();
                               setState(() => _loading = false);
                               CustomSnackBar.snackBar(context,

@@ -1,35 +1,31 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Bird {
-  final int tag;
-  final String type;
+  int tag;
+  String type;
+  Timestamp date;
   Bird({
     required this.tag,
     required this.type,
-  });
-
-  Bird copyWith({
-    int? tag,
-    String? type,
-  }) {
-    return Bird(
-      tag: tag ?? this.tag,
-      type: type ?? this.type,
-    );
-  }
+  }) : date = Timestamp.now();
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'tag': tag,
       'type': type,
+      'date': date,
     };
   }
 
   factory Bird.fromMap(Map<String, dynamic> map) {
-    return Bird(
+    final bird = Bird(
       tag: map['tag'] as int,
       type: map['type'] as String,
     );
+    bird.date = (map['date'] ?? Timestamp.now()) as Timestamp;
+    return bird;
   }
 
   String toJson() => json.encode(toMap());
@@ -38,7 +34,7 @@ class Bird {
       Bird.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'Bird(tag: $tag, type: $type)';
+  String toString() => 'Bird(tag: $tag, type: $type, date: $date)';
 
   @override
   bool operator ==(Object other) {

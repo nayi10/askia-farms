@@ -198,14 +198,16 @@ class _NewEggsCollectionState extends State<NewEggsCollection> {
                               form.markAllAsTouched();
                               return;
                             }
+                            debugPrint(
+                                TimeOfDay.now().format(context).toString());
                             final collection = EggCollection(
                                 numberOfEggs:
                                     form.control('numberOfEggs').value as int,
                                 broken: form.control('broken').value as int,
                                 date: Timestamp.fromDate(
                                     form.control('date').value as DateTime),
-                                time: '''${form.control('time').value.hour}:
-                                    ${form.control('time').value.minute}''');
+                                time: (form.control('time').value as TimeOfDay)
+                                    .format(context));
                             setState(() => _loading = true);
                             final ref =
                                 FirebaseFirestore.instance.collection('eggs');
